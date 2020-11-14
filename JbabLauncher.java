@@ -9,7 +9,7 @@ public class JbabLauncher {
  	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		System.out.println("欢迎来到张浩扬博士研发的JBAB CMD");
-		System.out.println("JBAB 1.0.6");
+		System.out.println("JBAB 1.1.0");
 		System.out.println("输入help以获得更多信息");
 		printPrompt();
 		while (true) {
@@ -35,7 +35,7 @@ public class JbabLauncher {
 			System.out.println("time - 显示当前时间（格式：时:分 年/月/日）");
 			System.out.println("update_record - 显示更新日志");
 			System.out.println("--- 1.0.3 ---");
-			System.out.println("var?[variable] = [value] - 给变量赋值（空格必不可少！）");
+			System.out.println("var?[variable]=[value] - 给变量赋值（不可有空格！）");
 			System.out.println("use?[variable] - 查找变量值，如不存在会提示");
 			System.out.println("del?[variable] - 删除变量及其对应值");
 			System.out.println("--- 1.0.4 ---");
@@ -46,6 +46,12 @@ public class JbabLauncher {
 			System.out.println("blockdel?[codeblockname] - 删除代码块");
 			System.out.println("blockcontent?[codeblockname] - 查看代码块内容");
 			System.out.println("blocklist - 列出所有代码块");
+			System.out.println("--- 1.1.0 ---");
+			System.out.println("wiki - 用默认首页打开Jbab Wiki");
+			System.out.println("wiki?[pagename] - 用给定的页面打开Jbab Wiki");
+			System.out.println("eval?[expression] - 计算表达式的值");
+			System.out.println("wait?[second] - 等待指定的秒数");
+			System.out.println("ide - 打开Jbab IDE");
 			printPrompt();
 		} else if (str.equals("exit")) {
 			System.out.println("感谢您使用张浩扬博士开发的JBAB CMD");
@@ -62,7 +68,7 @@ public class JbabLauncher {
 			} else {
 				String[] as = str.split("\\?");
 				String message = as[1];
-				message = message.replace("nil", "\n");
+				message = message.replace("\\n", "\n");
 				if (message.startsWith("var")) {
 					String s[] = message.split("_");
 					String name;
@@ -152,9 +158,11 @@ public class JbabLauncher {
 				String sa[] = str.split("\\?");
 				String sa2[] = sa[1].split("\\=");
 				String name = sa2[0];
+				name = name.trim();
 				String value;
 				try {
 					value = sa2[1];
+					value = value.trim();
 					if (value.startsWith("var ")) {
 						String src = value.substring(4);
 						String dest = name;
@@ -176,8 +184,12 @@ public class JbabLauncher {
 				} catch (Exception e) {
 					value = "nil";
 					System.out.println("变量值未填写，将自动设为nil");
-					varNames.add(name);
-					values.add(value);
+					if (varNames.contains(name)) {
+						values.set(varNames.indexOf(name), value);
+					} else {
+						varNames.add(name);
+						values.add(value);
+					}
 				}
 				System.out.println("设置成功");
 				printPrompt();
@@ -266,6 +278,10 @@ public class JbabLauncher {
 				String statements_un_handled = informations[1].substring(1);
 				int end = statements_un_handled.length();
 				String statements = statements_un_handled.substring(0, end-1);
+				if (codeblocknames.contains(name)) {
+					int ind = codeblocknames.indexOf(name);
+					codeblockstatements.set(ind, statements);
+				}
 				codeblocknames.add(name);
 				codeblockstatements.add(statements);
 				System.out.println("定义成功");
@@ -383,15 +399,32 @@ public class JbabLauncher {
 					}
 				}
 			}
+		} else if (str.equals("ide")) {
+			System.out.println("正在打开Jbab IDE...");
+			new JbabIDE();
+			printPrompt();
+		} else if (str.equals("wiki")) {
+			System.out.println("正在打开Jbab Wiki...");
+			new JbabWiki();
+			printPrompt();
+		} else if (str.startsWith("wiki")) {
+			if (str.equals("wiki?")) {
+				System.out.println("语法错误");
+				printPrompt();
+			} else {
+				String address = str.split("\\?")[1];
+				System.out.println("正在用特定网址" + address + "打开Jbab Wiki...");
+				new JbabWiki(address);
+				printPrompt();
+			}
 		} else {
 			System.out.println(str + "不是合法的JBAB命令");
 			printPrompt();
 		}
-
 	}
 	public static void printPrompt() {
 		if (echo) {
-			System.out.print(">>> ");
+			System.out.print("JBAB CMD> ");
 		}
 	}
 }

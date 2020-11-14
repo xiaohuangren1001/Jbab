@@ -36,6 +36,7 @@ public class JbabUI extends JFrame {
 				JbabLauncher.echo = false;
 				String[] statements = getStatements(textField.getText());
 				textField.setText("");
+				System.out.println();
 				for (String statement: statements) {
 					JbabLauncher.runcomm(statement);
 				}
@@ -67,10 +68,10 @@ public class JbabUI extends JFrame {
 	public static String[] getStatements(String fileName) {
 		try {
 			FileInputStream is = new FileInputStream(new File(fileName));
-			byte byt[] = new byte[1024];
+			byte byt[] = new byte[(int) new File(fileName).length()];
 			int len = is.read(byt);
 			String message = new String(byt, 0, len);
-			String[] statements = message.split(System.getProperty("line.separator"));
+			String[] statements = message.split("\\r?\\n");
 			return statements;
 		} catch (Exception e) {
 			e.printStackTrace();
