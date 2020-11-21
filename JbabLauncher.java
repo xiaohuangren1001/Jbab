@@ -75,21 +75,21 @@ public class JbabLauncher {
 					try {
 						name = s[1];
 						if (!varNames.contains(name)) {
-							System.out.println("变量" + name + "不存在或已被删除");
+							System.out.print("变量" + name + "不存在或已被删除");
 						} else {
 							String value = values.get(varNames.indexOf(name));
 							if (value.equals("nil")){
 								System.out.println();
 							} else {
-								System.out.println(value);
+								System.out.print(value);
 							}
 						}
 					} catch (Exception e) {
 						name = "";
-						System.out.println(message);
+						System.out.print(message);
 					}
 				} else {
-					System.out.println(message);
+					System.out.print(message);
 				}
 				printPrompt();
 			}
@@ -149,6 +149,7 @@ public class JbabLauncher {
 			System.out.println("1.0.4 - 加入了for循环，但for循环中不支持定义变量的操作（var）。");
 			System.out.println("1.0.5 - 更改update record命令为update_record命令，var?x = [value]改为var?x=[value]，print?var x改为print?var_x（为支持1.0.4中加入的for循环）");
 			System.out.println("1.0.6 - 加入了def、call、blockcontent、blockdel、blocklist命令。");
+			System.out.println("1.1.0 - 加入了ide、wiki、wait、eval命令和Jbab IDE组件。");
 			printPrompt();
 		} else if (str.startsWith("var")) {
 			if (str.equals("var") || str.equals("var?")) {
@@ -275,17 +276,20 @@ public class JbabLauncher {
 			try {
 				String[] informations = str.split("\\!")[1].split(" ");
 				String name = informations[0];
-				String statements_un_handled = informations[1].substring(1);
+				String statements_un_handled = str.substring(6+name.length());
 				int end = statements_un_handled.length();
 				String statements = statements_un_handled.substring(0, end-1);
 				if (codeblocknames.contains(name)) {
 					int ind = codeblocknames.indexOf(name);
 					codeblockstatements.set(ind, statements);
+					System.out.println("定义成功");
+					printPrompt();
+				} else {
+					codeblocknames.add(name);
+					codeblockstatements.add(statements);
+					System.out.println("定义成功");
+					printPrompt();
 				}
-				codeblocknames.add(name);
-				codeblockstatements.add(statements);
-				System.out.println("定义成功");
-				printPrompt();
 			} catch (Exception e) {
 				System.out.println("语法错误");
 				printPrompt();
@@ -358,9 +362,9 @@ public class JbabLauncher {
 				System.out.println("语法错误");
 				printPrompt();
 			} else {
-				long time = Long.parseLong(str.split("\\?")[1]);
+				double time = Double.parseDouble(str.split("\\?")[1]);
 				try {
-					Thread.sleep(time * 1000);
+					Thread.sleep((long)(time * 1000));
 					printPrompt();
 				} catch (InterruptedException e) {
 					System.out.println("等待被中断");
