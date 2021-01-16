@@ -3,13 +3,14 @@ import java.util.*;
 public class JbabLauncher {
 	private static ArrayList<String> varNames = new ArrayList<>();
 	private static ArrayList<String> values = new ArrayList<>();
+	public static ArrayList<String> types = new ArrayList<>();
 	private static ArrayList<String> codeblocknames = new ArrayList<>();
 	private static ArrayList<String> codeblockstatements = new ArrayList<>();
 	public static boolean echo = true;
  	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		System.out.println("欢迎来到张浩扬博士研发的JBAB CMD");
-		System.out.println("JBAB 1.1.0");
+		System.out.println("JBAB 1.1.1");
 		System.out.println("输入help以获得更多信息");
 		printPrompt();
 		while (true) {
@@ -18,6 +19,9 @@ public class JbabLauncher {
 			runcomm(a);
 		}
 	}
+	/**
+	 * @param str
+	 */
 	public static void runcomm(String str) {
 		if (str.equals("help")) {
 			System.out.println("JBAB是张浩扬博士综合JVAV和JABA开发的");
@@ -164,22 +168,29 @@ public class JbabLauncher {
 				try {
 					value = sa2[1];
 					value = value.trim();
-					if (value.startsWith("var ")) {
-						String src = value.substring(4);
+					String type = value.split(":")[1];
+					String val = value.split(":")[0];
+					if (val.startsWith("var ")) {
+						String src = val.substring(4);
 						String dest = name;
 						String srcvalue = values.get(varNames.indexOf(src));
 						if (varNames.contains(dest)) {
-							values.set(varNames.indexOf(dest), srcvalue);
+							if (!types.get(varNames.indexOf(dest)).equals(type)) {
+								System.out.println("类型不匹配");
+							}
+							else values.set(varNames.indexOf(dest), srcvalue);
 						} else {
 							varNames.add(dest);
 							values.add(srcvalue);
+							types.add(type);
 						}
 					} else {
 						if (varNames.contains(name)) {
-							values.set(varNames.indexOf(name), value);
+							values.set(varNames.indexOf(name), val);
 						} else {
 							varNames.add(name);
-							values.add(value);
+							values.add(val);
+							types.add(type);
 						}
 					}
 				} catch (Exception e) {
@@ -190,6 +201,7 @@ public class JbabLauncher {
 					} else {
 						varNames.add(name);
 						values.add(value);
+						types.add("None");
 					}
 				}
 				System.out.println("设置成功");
@@ -421,6 +433,20 @@ public class JbabLauncher {
 				new JbabWiki(address);
 				printPrompt();
 			}
+		} else if (str.startsWith("type")) {
+			if (str.equals("type") || str.equals("type?")) {
+				System.out.println("语法错误");
+			} else {
+				String name = str.split("\\?")[1];
+				if (!varNames.contains(name)) {
+					System.out.println("变量不存在或已被删除");
+				} else {
+					System.out.print("变量的类型为：");
+					String type = types.get(varNames.indexOf(name));
+					System.out.println(type);
+				}
+			}
+			printPrompt();
 		} else {
 			System.out.println(str + "不是合法的JBAB命令");
 			printPrompt();
