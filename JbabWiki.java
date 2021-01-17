@@ -13,6 +13,11 @@ public class JbabWiki extends JFrame {
 	private JScrollPane sp = new JScrollPane(text);
 	private Container c = getContentPane();
 	public void addBrowseListener() {
+		adf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				browse.doClick();
+			}
+		});
 		browse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String p = adf.getText();
@@ -31,6 +36,7 @@ public class JbabWiki extends JFrame {
 	}
 	private void initialize() {
 		addBrowseListener();
+		text.setEditable(false);
 		c.setLayout(new BorderLayout());
 		JPanel p = new JPanel();
 		p.setLayout(new FlowLayout());
@@ -99,6 +105,7 @@ public class JbabWiki extends JFrame {
 		private static ArrayList<String> u105 = new ArrayList<>();
 		private static ArrayList<String> u106 = new ArrayList<>();
 		private static ArrayList<String> u110 = new ArrayList<>();
+		private static ArrayList<String> u111 = new ArrayList<>();
 		private static void initiateAddress() {
 			address.clear();
 			address.add("zhanghy://jbab.wikipebio.com/JbabWiki");
@@ -152,6 +159,7 @@ public class JbabWiki extends JFrame {
 			address.add("zhanghy://jbab.wikipebio.com/updates/1.0.5");
 			address.add("zhanghy://jbab.wikipebio.com/updates/1.0.6");
 			address.add("zhanghy://jbab.wikipebio.com/updates/1.1.0");
+			address.add("zhanghy://jbab.wikipebio.com/updates/1.1.1");
 		}
 		private static void initiateContents() {
 			contents.clear();
@@ -197,6 +205,7 @@ public class JbabWiki extends JFrame {
 			addU105();
 			addU106();
 			addU110();
+			addU111();
 			contents.add(wiki.toArray(new String[] {}));
 			contents.add(commands.toArray(new String[] {}));
 			contents.add(help.toArray(new String[] {}));
@@ -239,6 +248,7 @@ public class JbabWiki extends JFrame {
 			contents.add(u105.toArray(new String[] {}));
 			contents.add(u106.toArray(new String[] {}));
 			contents.add(u110.toArray(new String[] {}));
+			contents.add(u111.toArray(new String[] {}));
 		}
 		private static void addWiki() {
 			wiki.clear();
@@ -382,8 +392,8 @@ public class JbabWiki extends JFrame {
 			var.clear();
 			var.add("命令var");
 			var.add("一、用法");
-			var.add("   var?[varname]=[value]");
-			var.add("   var?[varname]=var [anothervarname]");
+			var.add("   var?[varname]=[value]:[type]");
+			var.add("   var?[varname]=var [anothervarname]:[type]");
 			var.add("   var?[varname]");
 			var.add("二、条件");
 			var.add("   这三种都是总会成功。");
@@ -393,7 +403,8 @@ public class JbabWiki extends JFrame {
 			var.add("三、历史");
 			var.add("Jbab 1.0.3（变量更新）      加入了var。此时的var只有第一和第三种用法，且var的第一种用法当时为var?[varname] = [value]。");
 			var.add("Jbab 1.0.5（修补更新）      为兼容1.0.4中加入的for循环，修改var的第一种用法为var?[varname]=[value]。");
-			var.add("Jbab 1.1.0（wiki更新）    加入了var的第二种用法。");
+			var.add("Jbab 1.1.0（wiki更新）    加入了var的第二种用法。即var?[varname]=var [anothervarname]。");
+			var.add("Jbab 1.1.1                             加入了变量的类型，导致第一和第二种用法的格式修改。");
 		}
 		private static void addUse() {
 			use.clear();
@@ -520,7 +531,7 @@ public class JbabWiki extends JFrame {
 		private static void addNil() {
 			nil.clear();
 			nil.add("特殊值nil");
-			nil.add("nil是Jbab 1.0.3（变量更新）中加入的替代空值的特殊值。");
+			nil.add("nil是Jbab 1.0.3（变量更新）中加入的替代空值的特殊值。它的类型是None。");
 			nil.add("历史");
 			nil.add("Jbab 1.0.3（变量更新）       加入了nil。");
 		}
@@ -629,6 +640,12 @@ public class JbabWiki extends JFrame {
 			u110.add("这个更新标志着Jbab的1.0时代结束，同时Jbab也有了自己的wiki和官网。");
 			u110.add("官网网址：xiaohuangren1001.orgs.ml");
 		}
+		private static void addU111() {
+			u111.clear();
+			u111.add("Jbab 1.1.1更新");
+			u111.add("Jbab 1.1.1更新（又名“变量扩充更新（第一部分）”），是Jbab的第10个正式版。更改了创建变量的语法，为后面变量间的运算打好了基础。");
+			u111.add("并没有添加什么新命令。");
+		}
 		public static ArrayList<String> getAddress() {
 			initiateAddress();
 			return address;
@@ -644,9 +661,9 @@ public class JbabWiki extends JFrame {
 			try {
 				Desktop.getDesktop().browse(new URI(page));
 			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		} else {
+			adf.setText(page);
 			int i = address.indexOf(page);
 			String[] c = content.get(i);
 			Utils.setText(text, c);

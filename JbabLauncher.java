@@ -198,6 +198,7 @@ public class JbabLauncher {
 					System.out.println("变量值未填写，将自动设为nil");
 					if (varNames.contains(name)) {
 						values.set(varNames.indexOf(name), value);
+						types.set(varNames.indexOf(name), "None");
 					} else {
 						varNames.add(name);
 						values.add(value);
