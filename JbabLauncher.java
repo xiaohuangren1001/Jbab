@@ -3,14 +3,21 @@ import java.util.*;
 public class JbabLauncher {
 	private static ArrayList<String> varNames = new ArrayList<>();
 	private static ArrayList<String> values = new ArrayList<>();
-	public static ArrayList<String> types = new ArrayList<>();
+	private static ArrayList<String> types = new ArrayList<>();
+	private static ArrayList<String> allowtypes = new ArrayList<>();
 	private static ArrayList<String> codeblocknames = new ArrayList<>();
 	private static ArrayList<String> codeblockstatements = new ArrayList<>();
 	public static boolean echo = true;
+	static {
+		allowtypes.add("int");
+		allowtypes.add("long");
+		allowtypes.add("None");
+		allowtypes.add("string");
+	}
  	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		System.out.println("欢迎来到张浩扬博士研发的JBAB CMD");
-		System.out.println("JBAB 1.1.1");
+		System.out.println("JBAB 1.1.2");
 		System.out.println("输入help以获得更多信息");
 		printPrompt();
 		while (true) {
@@ -56,6 +63,8 @@ public class JbabLauncher {
 			System.out.println("eval?[expression] - 计算表达式的值");
 			System.out.println("wait?[second] - 等待指定的秒数");
 			System.out.println("ide - 打开Jbab IDE");
+			System.out.println("--- 1.1.2 ---");
+			System.out.println("blockadd?[codeblockname]:[statements] - 在代码块中添加一条语句");
 			printPrompt();
 		} else if (str.equals("exit")) {
 			System.out.println("感谢您使用张浩扬博士开发的JBAB CMD");
@@ -111,7 +120,7 @@ public class JbabLauncher {
 					System.out.println("已将" + s + "转化为二进制" + bi);
 				} catch (Exception e) {
 					System.out.println(s + "不是一个合法的数");
-					System.out.println("合法的数是[-2147483648, 2147483647]中的整数");
+					System.out.println("合法的数是[1, 2147483647]中的整数");
 				}
 				printPrompt();
 			}
@@ -154,6 +163,8 @@ public class JbabLauncher {
 			System.out.println("1.0.5 - 更改update record命令为update_record命令，var?x = [value]改为var?x=[value]，print?var x改为print?var_x（为支持1.0.4中加入的for循环）");
 			System.out.println("1.0.6 - 加入了def、call、blockcontent、blockdel、blocklist命令。");
 			System.out.println("1.1.0 - 加入了ide、wiki、wait、eval命令和Jbab IDE组件。");
+			System.out.println("1.1.1 - 更改了var命令的语法。");
+			System.out.println("1.1.2 - 加入了blockadd命令，添加了blockadd类型，移除了use命令。");
 			printPrompt();
 		} else if (str.startsWith("var")) {
 			if (str.equals("var") || str.equals("var?")) {
@@ -163,52 +174,118 @@ public class JbabLauncher {
 				String sa[] = str.split("\\?");
 				String sa2[] = sa[1].split("\\=");
 				String name = sa2[0];
-				name = name.trim();
-				String value;
+				String value, type;
 				try {
 					value = sa2[1];
 					value = value.trim();
-					String type = value.split(":")[1];
-					String val = value.split(":")[0];
-					if (val.startsWith("var ")) {
+					String val = value.split(":")[1];
+					type = value.split(":")[0];
+					if (val.startsWith("var_")) {
 						String src = val.substring(4);
 						String dest = name;
 						String srcvalue = values.get(varNames.indexOf(src));
 						if (varNames.contains(dest)) {
 							if (!types.get(varNames.indexOf(dest)).equals(type)) {
-								System.out.println("类型不匹配");
+								System.out.println("类型不匹配，值将设为nil");
 							}
 							else values.set(varNames.indexOf(dest), srcvalue);
 						} else {
 							varNames.add(dest);
 							values.add(srcvalue);
-							types.add(type);
+							if (!allowtypes.contains("type")) {
+								System.out.println("类型不存在");
+							} else {
+								if (type.equals("int")) {
+									try {
+										Integer.parseInt(srcvalue);
+									} catch (Exception e) {
+										System.out.println("类型不匹配，值将自动设为nil");
+										values.set(values.indexOf(srcvalue), "nil");
+										types.add("None");
+									}
+								} else if (type.equals("long")) {
+									try {
+										Long.parseLong(srcvalue);
+									} catch (Exception e) {
+										System.out.println("类型不匹配，值将自动设为nil");
+										values.set(values.indexOf(srcvalue), "nil");
+										types.add("None");
+									}
+								}
+								else types.add(type);
+							}
 						}
 					} else {
 						if (varNames.contains(name)) {
 							values.set(varNames.indexOf(name), val);
+							if (allowtypes.contains(type)) {
+								if (type.equals("int")) {
+									try {
+										Integer.parseInt(val);
+									} catch (Exception e) {
+										System.out.println("类型不匹配，值将自动设为nil");
+										values.set(varNames.indexOf(name), "nil");
+										types.set(varNames.indexOf(name), "None");
+									}
+								} else if (type.equals("long")) {
+									try {
+										Long.parseLong(val);
+									} catch (Exception e) {
+										System.out.println("类型不匹配，值将自动设为nil");
+										values.set(varNames.indexOf(name), "nil");
+										types.set(varNames.indexOf(name), "None");
+									}
+								}
+								else types.set(varNames.indexOf(name), type);
+							}
 						} else {
 							varNames.add(name);
 							values.add(val);
-							types.add(type);
+							if (allowtypes.contains(type)) {
+								if (type.equals("int")) {
+									try {
+										Integer.parseInt(val);
+									} catch (Exception e) {
+										System.out.println("类型不匹配，值将自动设为nil");
+										values.set(values.indexOf(val), "nil");
+										types.add("None");
+									}
+								} else if (type.equals("long")) {
+									try {
+										Long.parseLong(val);
+									} catch (Exception e) {
+										System.out.println("类型不匹配，值将自动设为nil");
+										values.set(values.indexOf(val), "nil");
+										types.add("None");
+									}
+								}
+								else types.add(type);
+							} else System.out.println("类型不存在");
 						}
 					}
 				} catch (Exception e) {
-					value = "nil";
-					System.out.println("变量值未填写，将自动设为nil");
-					if (varNames.contains(name)) {
-						values.set(varNames.indexOf(name), value);
-						types.set(varNames.indexOf(name), "None");
+					type = str.split(":")[1];
+					name = str.split("\\?")[1].split(":")[0];
+					if (type.equals("codeblock")) {
+						codeblocknames.add(name);
+						codeblockstatements.add("");
 					} else {
-						varNames.add(name);
-						values.add(value);
-						types.add("None");
+						value = "nil";
+						System.out.println("出现错误，值将自动设为nil"); 
+						if (varNames.contains(name)) { 
+							values.set(varNames.indexOf(name), value);
+						    types.set(varNames.indexOf(name), "None"); 
+						} else { 
+							varNames.add(name);
+						    values.add(value);
+						    types.add("None"); 
+						}
 					}
 				}
 				System.out.println("设置成功");
 				printPrompt();
 			}
-		} else if (str.startsWith("use")) {
+		}/* else if (str.startsWith("use")) {
 			if (str.equals("use") || str.equals("use?")) {
 				System.out.println("语法错误");
 				printPrompt();
@@ -223,7 +300,7 @@ public class JbabLauncher {
 				}
 				printPrompt();
 			}
-		} else if (str.startsWith("del")) {
+		}*/ else if (str.startsWith("del")) {
 			if (str.equals("del") || str.equals("del?")) {
 				System.out.println("语法错误");
 				printPrompt();
@@ -439,16 +516,45 @@ public class JbabLauncher {
 				System.out.println("语法错误");
 			} else {
 				String name = str.split("\\?")[1];
-				if (!varNames.contains(name)) {
-					System.out.println("变量不存在或已被删除");
-				} else {
+				if (codeblocknames.contains(name)) {
+					System.out.println("变量的类型为：代码块");
+				} else if (varNames.contains(name)) {
 					System.out.print("变量的类型为：");
 					String type = types.get(varNames.indexOf(name));
 					System.out.println(type);
+				} else {
+					System.out.println("变量不存在或已被删除");
 				}
 			}
 			printPrompt();
-		} else {
+		} else if (varNames.contains(str)) {
+			System.out.println(values.get(varNames.indexOf(str)));
+			printPrompt();
+		} else if (codeblocknames.contains(str)) {
+			System.out.println("<code block " + str + ">");
+			printPrompt();
+	    } else if (str.startsWith("blockadd")) {
+	    	if (str.equals("blockadd") || str.equals("blockadd?")) {
+	    		System.out.println("语法错误");
+	    	} else {
+	    		String inf = str.substring(9);
+	    		String blockname = inf.split(":")[0];
+	    		String blockstate = inf.split(":")[1];
+	    		if (!codeblocknames.contains(blockname)) {
+	    			System.out.println("代码块不存在或已被删除");
+	    		} else {
+	    			int id = codeblocknames.indexOf(blockname);
+	    			String val = codeblockstatements.get(id);
+	    			if (val.equals("")) {
+	    				codeblockstatements.set(id, blockstate);
+	    			} else {
+	    				codeblockstatements.set(id, val + "/" + blockstate);
+	    			}
+	    			System.out.println("语句添加成功");
+	    		}
+	    	}
+	    	printPrompt();
+	    } else {
 			System.out.println(str + "不是合法的JBAB命令");
 			printPrompt();
 		}

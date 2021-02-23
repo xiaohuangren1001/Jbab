@@ -60,7 +60,7 @@ public class JbabWiki extends JFrame {
 			area.setText(area.getText() + content);
 		}
 	}
-	public static class Properties {
+	private static class Properties {
 		private static ArrayList<String> address = new ArrayList<>();
 		private static ArrayList<String[]> contents = new ArrayList<>();
 		private static ArrayList<String> wiki = new ArrayList<>();
@@ -106,6 +106,8 @@ public class JbabWiki extends JFrame {
 		private static ArrayList<String> u106 = new ArrayList<>();
 		private static ArrayList<String> u110 = new ArrayList<>();
 		private static ArrayList<String> u111 = new ArrayList<>();
+		private static ArrayList<String> blockadd = new ArrayList<>();
+		private static ArrayList<String> u112 = new ArrayList<>();
 		private static void initiateAddress() {
 			address.clear();
 			address.add("zhanghy://jbab.wikipebio.com/JbabWiki");
@@ -140,6 +142,7 @@ public class JbabWiki extends JFrame {
 			address.add("zhanghy://jbab.wikipebio.com/commands/wait");
 			address.add("zhanghy://jbab.wikipebio.com/commands/value/nil");
 			address.add("zhanghy://jbab.wikipebio.com/commands/ide");
+			address.add("zhanghy://jbab.wikipebio.com/commands/blockadd");
 		}
 		private static void addKits() {
 			address.add("zhanghy://jbab.wikipebio.com/kits");
@@ -160,6 +163,7 @@ public class JbabWiki extends JFrame {
 			address.add("zhanghy://jbab.wikipebio.com/updates/1.0.6");
 			address.add("zhanghy://jbab.wikipebio.com/updates/1.1.0");
 			address.add("zhanghy://jbab.wikipebio.com/updates/1.1.1");
+			address.add("zhanghy://jbab.wikipebio.com/updates/1.1.2");
 		}
 		private static void initiateContents() {
 			contents.clear();
@@ -190,6 +194,7 @@ public class JbabWiki extends JFrame {
 			addWait();
 			addNil();
 			addIDE();
+			addBlockAdd();
 			addKits_();
 			addCmd();
 			addUI();
@@ -206,6 +211,7 @@ public class JbabWiki extends JFrame {
 			addU106();
 			addU110();
 			addU111();
+			addU112();
 			contents.add(wiki.toArray(new String[] {}));
 			contents.add(commands.toArray(new String[] {}));
 			contents.add(help.toArray(new String[] {}));
@@ -233,6 +239,7 @@ public class JbabWiki extends JFrame {
 			contents.add(wait.toArray(new String[] {}));
 			contents.add(nil.toArray(new String[] {}));
 			contents.add(ide.toArray(new String[] {}));
+			contents.add(blockadd.toArray(new String[] {}));
 			contents.add(kits.toArray(new String[] {}));
 			contents.add(cmd.toArray(new String[] {}));
 			contents.add(ui.toArray(new String[] {}));
@@ -249,6 +256,7 @@ public class JbabWiki extends JFrame {
 			contents.add(u106.toArray(new String[] {}));
 			contents.add(u110.toArray(new String[] {}));
 			contents.add(u111.toArray(new String[] {}));
+			contents.add(u112.toArray(new String[] {}));
 		}
 		private static void addWiki() {
 			wiki.clear();
@@ -264,6 +272,8 @@ public class JbabWiki extends JFrame {
 			wiki.add("2020年8月1日        Jbab 1.0.5更新（修补更新）发布。");
 			wiki.add("2020年9月              Jbab 1.0.6更新（函数更新）发布。");
 			wiki.add("2020年11月14日   Jbab 1.1.0更新（wiki更新）发布。");
+			wiki.add("2021年1月17日      Jbab 1.1.1更新（变量扩充更新 第一部分）发布。");
+			wiki.add("2021年2月23日      Jbab 1.1.2更新（变量扩充更新 第二部分）发布。");
 			wiki.add("二、特性");
 			wiki.add("Jbab吸Jaba之长、Jvav之短，融合后功能变得在两者中间。");
 			wiki.add("Jbab未来可能还会更新Jbab.awt（Jbab废弃窗口工具集）来实现制作GUI。");
@@ -405,16 +415,19 @@ public class JbabWiki extends JFrame {
 			var.add("Jbab 1.0.5（修补更新）      为兼容1.0.4中加入的for循环，修改var的第一种用法为var?[varname]=[value]。");
 			var.add("Jbab 1.1.0（wiki更新）    加入了var的第二种用法。即var?[varname]=var [anothervarname]。");
 			var.add("Jbab 1.1.1                             加入了变量的类型，导致第一和第二种用法的格式修改。");
+			var.add("Jbab 1.1.2                              加入了codeblock类型，创建一个codeblock类型的变量相当于定义一个名称与变量名相同的空代码块。");
 		}
 		private static void addUse() {
 			use.clear();
 			use.add("命令use");
+			use.add("（此部分内容已从Jbab移除，但您仍可通过使用旧版的方式使用它）");
 			use.add("一、用法");
 			use.add("   use?[varname]");
 			use.add("二、条件");
 			use.add("   当变量名对应的变量不存在时失败。成功时显示[varname] = value。");
 			use.add("三、历史");
-			use.add("Jbab 1.0.3（变量更新）      加入了use。");
+			use.add("Jbab 1.0.3（变量更新） 加入了use。");
+			use.add("Jbab 1.1.2                        移除了use。");
 		}
 		private static void addDel() {
 			del.clear();
@@ -645,6 +658,22 @@ public class JbabWiki extends JFrame {
 			u111.add("Jbab 1.1.1更新");
 			u111.add("Jbab 1.1.1更新（又名“变量扩充更新（第一部分）”），是Jbab的第10个正式版。更改了创建变量的语法，为后面变量间的运算打好了基础。");
 			u111.add("并没有添加什么新命令。");
+		}
+		private static void addBlockAdd() {
+			blockadd.clear();
+			blockadd.add("命令blockadd");
+			blockadd.add("一、用法");
+			blockadd.add("  blockadd?[codeblockname]:[statement]");
+			blockadd.add("二、条件");
+			blockadd.add("  当代码块存在时往代码块中添加一条语句。否则提示不存在。");
+			blockadd.add("三、历史");
+			blockadd.add("Jbab 1.1.2（变量扩充更新 第二部分）  加入了blockadd。");
+		}
+		private static void addU112() {
+			u112.clear();
+			u112.add("Jbab 1.1.2更新");
+			u112.add("Jbab 1.1.2更新（又名“变量扩充更新 第二部分”），是Jbab的第11个正式版。添加了类型codeblock，命令blockadd，也限定了类型的种类，以及输入变量名即可查看值的语法，并移除了use命令。");
+			u112.add("Jbab 1.1.2更新虽然仍然没有更新变量间的运算，不过应该也快了（");
 		}
 		public static ArrayList<String> getAddress() {
 			initiateAddress();
