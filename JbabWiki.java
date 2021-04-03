@@ -108,6 +108,10 @@ public class JbabWiki extends JFrame {
 		private static ArrayList<String> u111 = new ArrayList<>();
 		private static ArrayList<String> blockadd = new ArrayList<>();
 		private static ArrayList<String> u112 = new ArrayList<>();
+		private static ArrayList<String> u113 = new ArrayList<>();
+		private static ArrayList<String> aprilfool = new ArrayList<>();
+		private static ArrayList<String> aprilfoolsmode = new ArrayList<>();
+		private static ArrayList<String> execute = new ArrayList<>();
 		private static void initiateAddress() {
 			address.clear();
 			address.add("zhanghy://jbab.wikipebio.com/JbabWiki");
@@ -143,6 +147,8 @@ public class JbabWiki extends JFrame {
 			address.add("zhanghy://jbab.wikipebio.com/commands/value/nil");
 			address.add("zhanghy://jbab.wikipebio.com/commands/ide");
 			address.add("zhanghy://jbab.wikipebio.com/commands/blockadd");
+			address.add("zhanghy://jbab.wikipebio.com/commands/aprilfoolsmode");
+			address.add("zhanghy://jbab.wikipebio.com/commands/execute");
 		}
 		private static void addKits() {
 			address.add("zhanghy://jbab.wikipebio.com/kits");
@@ -151,6 +157,7 @@ public class JbabWiki extends JFrame {
 			address.add("zhanghy://jbab.wikipebio.com/kits/calculator");
 			address.add("zhanghy://jbab.wikipebio.com/kits/wiki");
 			address.add("zhanghy://jbab.wikipebio.com/kits/ide");
+			address.add("zhanghy://jbab.wikipebio.com/kits/aprilfool");
 		}
 		private static void addUpdates() {
 			address.add("zhanghy://jbab.wikipebio.com/updates/1.0.0");
@@ -164,6 +171,7 @@ public class JbabWiki extends JFrame {
 			address.add("zhanghy://jbab.wikipebio.com/updates/1.1.0");
 			address.add("zhanghy://jbab.wikipebio.com/updates/1.1.1");
 			address.add("zhanghy://jbab.wikipebio.com/updates/1.1.2");
+			address.add("zhanghy://jbab.wikipebio.com/updates/1.1.3");
 		}
 		private static void initiateContents() {
 			contents.clear();
@@ -195,12 +203,15 @@ public class JbabWiki extends JFrame {
 			addNil();
 			addIDE();
 			addBlockAdd();
+			addAprilFoolsMode();
+			addExecute();
 			addKits_();
 			addCmd();
 			addUI();
 			addCalculator_();
 			addWiki__();
 			addIDE_();
+			addAprilFool();
 			addU100();
 			addU101();
 			addU102();
@@ -212,6 +223,7 @@ public class JbabWiki extends JFrame {
 			addU110();
 			addU111();
 			addU112();
+			addU113();
 			contents.add(wiki.toArray(new String[] {}));
 			contents.add(commands.toArray(new String[] {}));
 			contents.add(help.toArray(new String[] {}));
@@ -240,12 +252,15 @@ public class JbabWiki extends JFrame {
 			contents.add(nil.toArray(new String[] {}));
 			contents.add(ide.toArray(new String[] {}));
 			contents.add(blockadd.toArray(new String[] {}));
+			contents.add(aprilfoolsmode.toArray(new String[] {}));
+			contents.add(execute.toArray(new String[] {}));
 			contents.add(kits.toArray(new String[] {}));
 			contents.add(cmd.toArray(new String[] {}));
 			contents.add(ui.toArray(new String[] {}));
 			contents.add(calculator_.toArray(new String[] {}));
 			contents.add(wiki__.toArray(new String[] {}));
 			contents.add(ide_.toArray(new String[] {}));
+			contents.add(aprilfool.toArray(new String[] {}));
 			contents.add(u100.toArray(new String[] {}));
 			contents.add(u101.toArray(new String[] {}));
 			contents.add(u102.toArray(new String[] {}));
@@ -257,6 +272,7 @@ public class JbabWiki extends JFrame {
 			contents.add(u110.toArray(new String[] {}));
 			contents.add(u111.toArray(new String[] {}));
 			contents.add(u112.toArray(new String[] {}));
+			contents.add(u113.toArray(new String[] {}));
 		}
 		private static void addWiki() {
 			wiki.clear();
@@ -274,6 +290,7 @@ public class JbabWiki extends JFrame {
 			wiki.add("2020年11月14日   Jbab 1.1.0更新（wiki更新）发布。");
 			wiki.add("2021年1月17日      Jbab 1.1.1更新（变量扩充更新 第一部分）发布。");
 			wiki.add("2021年2月23日      Jbab 1.1.2更新（变量扩充更新 第二部分）发布。");
+			wiki.add("2021年4月3日         Jbab 1.1.3更新（愚人节更新）发布。");
 			wiki.add("二、特性");
 			wiki.add("Jbab吸Jaba之长、Jvav之短，融合后功能变得在两者中间。");
 			wiki.add("Jbab未来可能还会更新Jbab.awt（Jbab废弃窗口工具集）来实现制作GUI。");
@@ -312,12 +329,14 @@ public class JbabWiki extends JFrame {
 		private static void addCalculator() {
 			calculator.clear();
 			calculator.add("命令calculator");
+			calculator.add("（此命令已从Jbab中移除，不过您仍可以通过使用旧版本的方法据需使用它）");
 			calculator.add("一、用法");
 			calculator.add("   calculator");
 			calculator.add("二、条件");
 			calculator.add("   总会成功。转至Jbab Calculator。");
 			calculator.add("三、历史");
 			calculator.add("Jbab 1.0.0（基础更新）       加入了calculator。");
+			calculator.add("Jbab 1.1.?            移除了calculator。");
 		}
 		private static void addCallUI() {
 			callUI.clear();
@@ -581,7 +600,7 @@ public class JbabWiki extends JFrame {
 			calculator_.clear();
 			calculator_.add("Jbab Calculator");
 			calculator_.add("Jbab Calculator是Jbab的一个组件，就是个普通的计算器。");
-			calculator_.add("目前Jbab Calculator已停更。（不会加新的东西）");
+			calculator_.add("目前Jbab Calculator已经无法使用，用eval命令代替即可。");
 		}
 		private static void addWiki__() {
 			wiki__.clear();
@@ -674,6 +693,39 @@ public class JbabWiki extends JFrame {
 			u112.add("Jbab 1.1.2更新");
 			u112.add("Jbab 1.1.2更新（又名“变量扩充更新 第二部分”），是Jbab的第11个正式版。添加了类型codeblock，命令blockadd，也限定了类型的种类，以及输入变量名即可查看值的语法，并移除了use命令。");
 			u112.add("Jbab 1.1.2更新虽然仍然没有更新变量间的运算，不过应该也快了（");
+		}
+		private static void addAprilFool() {
+			aprilfool.clear();
+			aprilfool.add("Jbab愚人节模式");
+			aprilfool.add("Jbab愚人节模式是Jbab的一个组件，是混乱的Jbab。");
+			aprilfool.add("似乎把背景设置在使用者被关起来的地方。");
+			aprilfool.add("并没有设置只在愚人节时可用。");
+		}
+		private static void addU113() {
+			u113.clear();
+			u113.add("Jbab 1.1.3更新");
+			u113.add("Jbab 1.1.3更新（又名“愚人节更新”），是Jbab的第12个正式版。添加了execute命令，和愚人节模式。");
+			u113.add("从1.1.3开始，Jbab可能要渐渐偏离，预计在1.2会更名为wtscript。");
+		}
+		private static void addAprilFoolsMode() {
+			aprilfoolsmode.clear();
+			aprilfoolsmode.add("命令aprilfoolsmode");
+			aprilfoolsmode.add("一、用法");
+			aprilfoolsmode.add("   aprilfoolsmode");
+			aprilfoolsmode.add("二、条件");
+			aprilfoolsmode.add("   总会成功。进入愚人节模式组件。");
+			aprilfoolsmode.add("三、历史");
+			aprilfoolsmode.add("Jbab 1.1.3（愚人节更新）                         加入了aprilfoolsmode。");
+		}
+		private static void addExecute() {
+			execute.clear();
+			execute.add("命令execute");
+			execute.add("一、用法");
+			execute.add("   execute?[command]");
+			execute.add("二、条件");
+			execute.add("   命令不存在时失败。");
+			execute.add("三、历史");
+			execute.add("Jbab 1.1.3（愚人节更新）                         加入了execute。");
 		}
 		public static ArrayList<String> getAddress() {
 			initiateAddress();

@@ -1,5 +1,5 @@
-import java.text.*;
 import java.util.*;
+import java.text.*;
 public class JbabLauncher {
 	private static ArrayList<String> varNames = new ArrayList<>();
 	private static ArrayList<String> values = new ArrayList<>();
@@ -8,6 +8,7 @@ public class JbabLauncher {
 	private static ArrayList<String> codeblocknames = new ArrayList<>();
 	private static ArrayList<String> codeblockstatements = new ArrayList<>();
 	public static boolean echo = true;
+	public static boolean fromJAPF = false;
 	static {
 		allowtypes.add("int");
 		allowtypes.add("long");
@@ -16,9 +17,11 @@ public class JbabLauncher {
 	}
  	@SuppressWarnings("resource")
 	public static void main(String[] args) {
-		System.out.println("欢迎来到张浩扬博士研发的JBAB CMD");
-		System.out.println("JBAB 1.1.2");
-		System.out.println("输入help以获得更多信息");
+		if (!fromJAPF) {
+			System.out.println("欢迎来到张浩扬博士研发的JBAB CMD");
+			System.out.println("JBAB 1.1.3");
+			System.out.println("输入help以获得更多信息");
+		}
 		printPrompt();
 		while (true) {
 			Scanner s = new Scanner(System.in);
@@ -65,6 +68,9 @@ public class JbabLauncher {
 			System.out.println("ide - 打开Jbab IDE");
 			System.out.println("--- 1.1.2 ---");
 			System.out.println("blockadd?[codeblockname]:[statements] - 在代码块中添加一条语句");
+			System.out.println("--- 1.1.3 ---");
+			System.out.println("aprilfoolmode - 祝你玩得开心");
+			System.out.println("execute?[command] - 执行命令");
 			printPrompt();
 		} else if (str.equals("exit")) {
 			System.out.println("感谢您使用张浩扬博士开发的JBAB CMD");
@@ -72,9 +78,9 @@ public class JbabLauncher {
 		} else if (str.equals("callUI")) {
 			new JbabUI();
 			printPrompt();
-		} else if (str.equals("calculator")) {
+		} /*else if (str.equals("calculator")) {
 			new JbabCalculator();
-		} else if (str.startsWith("print")) {
+		}*/ else if (str.startsWith("print")) {
 			if (str.equals("print") || str.equals("print?")) {
 				System.out.println("语法错误");
 				printPrompt();
@@ -154,7 +160,7 @@ public class JbabLauncher {
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm yyyy/MM/dd");
 			System.out.println("当前时间：" + sdf.format(new Date()));
 			printPrompt();
-		} else if (str.equals("update_record")) {
+		}/* else if (str.equals("update_record")) {
 			System.out.println("1.0.0 - 加入了print、ejz、run、help、exit、calculator、callUI命令，加入了JBAB UI、JBAB CMD、JBAB CALCULATOR组件。");
 			System.out.println("1.0.1 - 加入了time、version、update record命令，修改了help命令，使1.0.0与1.0.1的命令隔开，更新了JBAB UI的内容，添加了“关于JBAB”按钮。");
 			System.out.println("1.0.2a - 因为1.0.2更新因为BUG被撤回，所以在JBAB UI中添加了为什么撤回更新的公告；虽然名为1.0.2a，但实际上与更新1.0.1并在一起。");
@@ -166,7 +172,7 @@ public class JbabLauncher {
 			System.out.println("1.1.1 - 更改了var命令的语法。");
 			System.out.println("1.1.2 - 加入了blockadd命令，添加了blockadd类型，移除了use命令。");
 			printPrompt();
-		} else if (str.startsWith("var")) {
+		}*/ else if (str.startsWith("var")) {
 			if (str.equals("var") || str.equals("var?")) {
 				System.out.println("语法错误");
 				printPrompt();
@@ -554,7 +560,56 @@ public class JbabLauncher {
 	    		}
 	    	}
 	    	printPrompt();
-	    } else {
+	    } /*else if (str.contains("+") || str.contains("-") || str.contains("*") || str.contains("/")) {
+	    	ScriptEngineManager manager = new ScriptEngineManager();
+	    	ScriptEngine scriptEngine = manager.getEngineByName("nashorn");
+	    	try {
+	    		String result = String.valueOf(scriptEngine.eval(str));
+	    		System.out.println(result);
+	    	} catch (ScriptException e) {
+	    		System.out.println("表达式格式错误");
+	    	}
+	    	printPrompt();
+	    }*/ else if (str.startsWith("execute")) {
+	    	if (str.equals("execute") || str.equals("execute?")) {
+	    		System.out.println("语法错误");
+	    	} else {
+	    		String comm = str.split("\\?")[1];
+	    		try {
+	    			Runtime.getRuntime().exec("cmd /c " + comm);
+	    		} catch (Exception e) {
+	    			System.out.println("运行中出现错误");
+	    		}
+	    	}
+	    	printPrompt();
+	    } else if (str.equals("aprilfoolsmode")) {
+	    	System.out.println("玩得开心");
+	    	JbabAprilFools.main(new String[] {"april"});
+	    	System.exit(0);
+	    } /*else if (str.startsWith("input")) {
+	    	if (str.equals("input") || str.equals("input?")) {
+	    		System.out.println("语法错误");
+	    	} else {
+	    		String varname = str.split("\\?")[1];
+	    		if (varNames.contains(varname)) {
+	    			Scanner s = new Scanner(System.in);
+	    			String value = s.nextLine();
+	    			if (types.get(varNames.indexOf(varname)).equals("int") || types.get(varNames.indexOf(varname)).equals("long")) {
+	    				try {
+	    					Integer.parseInt(value);
+	    				} catch (Exception e) {
+	    					System.out.println("值不符合要求");
+	    				}
+	    			}
+	    			s.close();
+	    		} else {
+	    			System.out.println("变量不存在");
+	    		}
+	    	}
+	    	printPrompt();
+	    } else if (str.startsWith("varadd")) {
+	    	
+	    }*/ else {
 			System.out.println(str + "不是合法的JBAB命令");
 			printPrompt();
 		}

@@ -10,7 +10,7 @@ public class JbabUI extends JFrame {
 		setTitle("JBAB UI");
 		setVisible(true);
 		setDefaultCloseOperation(2);
-		JLabel label = new JLabel("欢迎来到JBAB UI，请在下面的文本框内文件名以编译，Jbab版本：1.1.2");
+		JLabel label = new JLabel("欢迎来到JBAB UI，请在下面的文本框内文件名以编译，Jbab版本：1.1.3");
 		JButton button1 = new JButton("关于Jbab");
 		JButton button2 = new JButton("Jbab1.0.2更新取消公告");
 		JButton button3 = new JButton("前往Jbab github");
