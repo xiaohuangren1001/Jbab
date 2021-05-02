@@ -23,15 +23,9 @@ public class JbabIDE extends JFrame {
 	private JMenuItem addPrint = new JMenuItem("Ìí¼Óprint?ÃüÁî");
 	private JMenuItem addTime = new JMenuItem("Ìí¼ÓtimeÃüÁî");
 	private JMenuItem addHelp = new JMenuItem("Ìí¼ÓhelpÃüÁî");
-	private JMenuItem addUpdateRecord = new JMenuItem("Ìí¼Óupdate_recordÃüÁî");
 	private JMenuItem addVar = new JMenuItem("Ìí¼ÓvarÃüÁî");
-	private JMenuItem addUse = new JMenuItem("Ìí¼ÓuseÃüÁî");
 	private JMenuItem addDel = new JMenuItem("Ìí¼ÓdelÃüÁî");
 	private JMenuItem addDef = new JMenuItem("Ìí¼ÓdefÃüÁî");
-	public JMenuItem addCall = new JMenuItem("Ìí¼ÓcallÃüÁî");
-	public JMenuItem addBlockDel = new JMenuItem("Ìí¼ÓblockdelÃüÁî");
-	public JMenuItem addBlockList = new JMenuItem("Ìí¼ÓblocklistÃüÁî");
-	public JMenuItem addBlockContent = new JMenuItem("Ìí¼ÓblockcontentÃüÁî");
 	private String filename = "Untitled";
 	public static Font font;
 	private void initialize() {
@@ -180,19 +174,9 @@ public class JbabIDE extends JFrame {
 				textarea.append("help" + "\r\n");
 			}
 		});
-		addUpdateRecord.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textarea.append("update_record" + "\r\n");
-			}
-		});
 		addVar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				textarea.append("var?" + "\r\n");
-			}
-		});
-		addUse.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textarea.append("use?" + "\r\n");
 			}
 		});
 		addDel.addActionListener(new ActionListener() {
@@ -208,12 +192,9 @@ public class JbabIDE extends JFrame {
 		source.add(addPrint);
 		source.add(addTime);
 		source.add(addHelp);
-		source.add(addUpdateRecord);
 		source.add(addVar);
-		source.add(addUse);
 		source.add(addDel);
 		source.add(addDef);
-		
 	}
 	private void addMenus() {
 		menubar.add(file);

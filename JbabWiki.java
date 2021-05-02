@@ -112,6 +112,11 @@ public class JbabWiki extends JFrame {
 		private static ArrayList<String> aprilfool = new ArrayList<>();
 		private static ArrayList<String> aprilfoolsmode = new ArrayList<>();
 		private static ArrayList<String> execute = new ArrayList<>();
+		private static ArrayList<String> u114 = new ArrayList<>();
+		private static ArrayList<String> addvar = new ArrayList<>();
+		private static ArrayList<String> subvar = new ArrayList<>();
+		private static ArrayList<String> mulvar = new ArrayList<>();
+		private static ArrayList<String> divvar = new ArrayList<>();
 		private static void initiateAddress() {
 			address.clear();
 			address.add("zhanghy://jbab.wikipebio.com/JbabWiki");
@@ -149,6 +154,10 @@ public class JbabWiki extends JFrame {
 			address.add("zhanghy://jbab.wikipebio.com/commands/blockadd");
 			address.add("zhanghy://jbab.wikipebio.com/commands/aprilfoolsmode");
 			address.add("zhanghy://jbab.wikipebio.com/commands/execute");
+			address.add("zhanghy://jbab.wikipebio.com/commands/addvar");
+			address.add("zhanghy://jbab.wikipebio.com/commands/subvar");
+			address.add("zhanghy://jbab.wikipebio.com/commands/mulvar");
+			address.add("zhanghy://jbab.wikipebio.com/commands/divvar");
 		}
 		private static void addKits() {
 			address.add("zhanghy://jbab.wikipebio.com/kits");
@@ -172,6 +181,7 @@ public class JbabWiki extends JFrame {
 			address.add("zhanghy://jbab.wikipebio.com/updates/1.1.1");
 			address.add("zhanghy://jbab.wikipebio.com/updates/1.1.2");
 			address.add("zhanghy://jbab.wikipebio.com/updates/1.1.3");
+			address.add("zhanghy://jbab.wikipebio.com/updates/1.1.4");
 		}
 		private static void initiateContents() {
 			contents.clear();
@@ -205,6 +215,10 @@ public class JbabWiki extends JFrame {
 			addBlockAdd();
 			addAprilFoolsMode();
 			addExecute();
+			addAddvar();
+			addSubvar();
+			addMulvar();
+			addDivvar();
 			addKits_();
 			addCmd();
 			addUI();
@@ -224,6 +238,7 @@ public class JbabWiki extends JFrame {
 			addU111();
 			addU112();
 			addU113();
+			addU114();
 			contents.add(wiki.toArray(new String[] {}));
 			contents.add(commands.toArray(new String[] {}));
 			contents.add(help.toArray(new String[] {}));
@@ -254,6 +269,10 @@ public class JbabWiki extends JFrame {
 			contents.add(blockadd.toArray(new String[] {}));
 			contents.add(aprilfoolsmode.toArray(new String[] {}));
 			contents.add(execute.toArray(new String[] {}));
+			contents.add(addvar.toArray(new String[] {}));
+			contents.add(subvar.toArray(new String[] {}));
+			contents.add(mulvar.toArray(new String[] {}));
+			contents.add(divvar.toArray(new String[] {}));
 			contents.add(kits.toArray(new String[] {}));
 			contents.add(cmd.toArray(new String[] {}));
 			contents.add(ui.toArray(new String[] {}));
@@ -273,6 +292,7 @@ public class JbabWiki extends JFrame {
 			contents.add(u111.toArray(new String[] {}));
 			contents.add(u112.toArray(new String[] {}));
 			contents.add(u113.toArray(new String[] {}));
+			contents.add(u114.toArray(new String[] {}));
 		}
 		private static void addWiki() {
 			wiki.clear();
@@ -291,6 +311,7 @@ public class JbabWiki extends JFrame {
 			wiki.add("2021年1月17日      Jbab 1.1.1更新（变量扩充更新 第一部分）发布。");
 			wiki.add("2021年2月23日      Jbab 1.1.2更新（变量扩充更新 第二部分）发布。");
 			wiki.add("2021年4月3日         Jbab 1.1.3更新（愚人节更新）发布。");
+			wiki.add("2021年4月25日      Jbab 1.1.4更新（变量扩充更新 第三部分）发布。");
 			wiki.add("二、特性");
 			wiki.add("Jbab吸Jaba之长、Jvav之短，融合后功能变得在两者中间。");
 			wiki.add("Jbab未来可能还会更新Jbab.awt（Jbab废弃窗口工具集）来实现制作GUI。");
@@ -726,6 +747,54 @@ public class JbabWiki extends JFrame {
 			execute.add("   命令不存在时失败。");
 			execute.add("三、历史");
 			execute.add("Jbab 1.1.3（愚人节更新）                         加入了execute。");
+		}
+		private static void addU114() {
+			u114.clear();
+			u114.add("Jbab 1.1.4更新");
+			u114.add("Jbab 1.1.4更新（又名“变量扩充更新 第三部分”），更新了变量的加减乘除。");
+			u114.add("Jbab 1.1.5往后将专注于更新包。");
+		}
+		private static void addAddvar() {
+			addvar.clear();
+			addvar.add("命令addvar");
+			addvar.add("一、用法");
+			addvar.add("  addvar?[var]:[num/var]");
+			addvar.add("二、条件");
+			addvar.add("  addvar在满足以下条件时会成功：");
+			addvar.add("  var的类型为string，且第二个var的类型也为string；");
+			addvar.add("  var的类型为int，且num/var的类型也为int。");
+			addvar.add("三、历史");
+			addvar.add("Jbab 1.1.4（“变量扩充更新 第四部分”）  加入了addvar。");
+		}
+		private static void addSubvar() {
+			subvar.clear();
+			subvar.add("命令subvar");
+			subvar.add("一、用法");
+			subvar.add("  subvar?[var]:[num/var]");
+			subvar.add("二、条件");
+			subvar.add("  在var是整型且num/var是整数的情况下会成功。");
+			subvar.add("三、历史");
+			subvar.add("Jbab 1.1.4（变量扩充更新 第三部分）  加入了subvar。");
+		}
+		private static void addMulvar() {
+			mulvar.clear();
+			mulvar.add("一、用法");
+			mulvar.add("  mulvar?[var]:[num/var]");
+			mulvar.add("二、条件");
+			mulvar.add("  当var是string/int且num/var是int时成功。");
+			mulvar.add("三、历史");
+			mulvar.add("Jbab 1.1.4（变量扩充更新 第三部分） 加入了mulvar。");
+		}
+		private static void addDivvar() {
+			divvar.clear();
+			divvar.add("命令divvar");
+			divvar.add("一、用法");
+			divvar.add("  divvar?[var]:[num/var]");
+			divvar.add("二、条件");
+			divvar.add("  在var是int且num/var是int时成功。");
+			divvar.add("  由于条件与subvar神似，所以直接用subvar代码改的。");
+			divvar.add("三、历史");
+			divvar.add("Jbab 1.1.4（变量扩充更新 第三部分）  加入了divvar。");
 		}
 		public static ArrayList<String> getAddress() {
 			initiateAddress();

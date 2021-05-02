@@ -7,24 +7,22 @@ public class JbabLauncher {
 	private static ArrayList<String> allowtypes = new ArrayList<>();
 	private static ArrayList<String> codeblocknames = new ArrayList<>();
 	private static ArrayList<String> codeblockstatements = new ArrayList<>();
+	private static Scanner s = new Scanner(System.in);
 	public static boolean echo = true;
 	public static boolean fromJAPF = false;
 	static {
 		allowtypes.add("int");
 		allowtypes.add("long");
-		allowtypes.add("None");
 		allowtypes.add("string");
 	}
- 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		if (!fromJAPF) {
 			System.out.println("欢迎来到张浩扬博士研发的JBAB CMD");
-			System.out.println("JBAB 1.1.3");
+			System.out.println("JBAB 1.1.4");
 			System.out.println("输入help以获得更多信息");
 		}
 		printPrompt();
 		while (true) {
-			Scanner s = new Scanner(System.in);
 			String a = s.nextLine();
 			runcomm(a);
 		}
@@ -69,8 +67,14 @@ public class JbabLauncher {
 			System.out.println("--- 1.1.2 ---");
 			System.out.println("blockadd?[codeblockname]:[statements] - 在代码块中添加一条语句");
 			System.out.println("--- 1.1.3 ---");
-			System.out.println("aprilfoolmode - 祝你玩得开心");
+			System.out.println("aprilfoolsmode - 祝你玩得开心");
 			System.out.println("execute?[command] - 执行命令");
+			System.out.println("--- 1.1.4 ---");
+			System.out.println("input?[varname] - 输入数据至varname");
+			System.out.println("addvar?[varname]:[num/var] - 加");
+			System.out.println("subvar?[varname]:[num/var] - 减");
+			System.out.println("mulvar?[varname]:[num/var] - 乘");
+			System.out.println("divvar?[varname]:[num/var] - 除，注意是两个v");
 			printPrompt();
 		} else if (str.equals("exit")) {
 			System.out.println("感谢您使用张浩扬博士开发的JBAB CMD");
@@ -78,8 +82,13 @@ public class JbabLauncher {
 		} else if (str.equals("callUI")) {
 			new JbabUI();
 			printPrompt();
-		} /*else if (str.equals("calculator")) {
-			new JbabCalculator();
+			return;
+		}/* else if (str.equals("calculator")) {
+			if (!Calculation.installed) {
+				System.out.println("Jbab.calculation包未启用");
+			} else {
+				new JbabCalculator();
+			}
 		}*/ else if (str.startsWith("print")) {
 			if (str.equals("print") || str.equals("print?")) {
 				System.out.println("语法错误");
@@ -184,8 +193,8 @@ public class JbabLauncher {
 				try {
 					value = sa2[1];
 					value = value.trim();
-					String val = value.split(":")[1];
-					type = value.split(":")[0];
+					String val = value.split(":")[0];
+					type = value.split(":")[1];
 					if (val.startsWith("var_")) {
 						String src = val.substring(4);
 						String dest = name;
@@ -198,12 +207,13 @@ public class JbabLauncher {
 						} else {
 							varNames.add(dest);
 							values.add(srcvalue);
-							if (!allowtypes.contains("type")) {
+							if (!allowtypes.contains(type)) {
 								System.out.println("类型不存在");
 							} else {
 								if (type.equals("int")) {
 									try {
 										Integer.parseInt(srcvalue);
+										types.set(varNames.indexOf(name), "int");
 									} catch (Exception e) {
 										System.out.println("类型不匹配，值将自动设为nil");
 										values.set(values.indexOf(srcvalue), "nil");
@@ -212,6 +222,7 @@ public class JbabLauncher {
 								} else if (type.equals("long")) {
 									try {
 										Long.parseLong(srcvalue);
+										types.set(varNames.indexOf(name), "long");
 									} catch (Exception e) {
 										System.out.println("类型不匹配，值将自动设为nil");
 										values.set(values.indexOf(srcvalue), "nil");
@@ -228,6 +239,7 @@ public class JbabLauncher {
 								if (type.equals("int")) {
 									try {
 										Integer.parseInt(val);
+										types.set(varNames.indexOf(name), "int");
 									} catch (Exception e) {
 										System.out.println("类型不匹配，值将自动设为nil");
 										values.set(varNames.indexOf(name), "nil");
@@ -236,6 +248,7 @@ public class JbabLauncher {
 								} else if (type.equals("long")) {
 									try {
 										Long.parseLong(val);
+										types.set(varNames.indexOf(name), "long");
 									} catch (Exception e) {
 										System.out.println("类型不匹配，值将自动设为nil");
 										values.set(varNames.indexOf(name), "nil");
@@ -251,46 +264,51 @@ public class JbabLauncher {
 								if (type.equals("int")) {
 									try {
 										Integer.parseInt(val);
+										types.add("int");
 									} catch (Exception e) {
 										System.out.println("类型不匹配，值将自动设为nil");
 										values.set(values.indexOf(val), "nil");
-										types.add("None");
+										types.add("int");
 									}
 								} else if (type.equals("long")) {
 									try {
 										Long.parseLong(val);
+										types.add("long");
 									} catch (Exception e) {
 										System.out.println("类型不匹配，值将自动设为nil");
 										values.set(values.indexOf(val), "nil");
-										types.add("None");
+										types.add("long");
 									}
-								}
-								else types.add(type);
+								} else types.add(type);
 							} else System.out.println("类型不存在");
 						}
 					}
 				} catch (Exception e) {
-					type = str.split(":")[1];
-					name = str.split("\\?")[1].split(":")[0];
-					if (type.equals("codeblock")) {
-						codeblocknames.add(name);
-						codeblockstatements.add("");
-					} else {
-						value = "nil";
-						System.out.println("出现错误，值将自动设为nil"); 
-						if (varNames.contains(name)) { 
-							values.set(varNames.indexOf(name), value);
-						    types.set(varNames.indexOf(name), "None"); 
-						} else { 
-							varNames.add(name);
-						    values.add(value);
-						    types.add("None"); 
+					try {
+						type = str.split(":")[1];
+						name = str.split("\\?")[1].split(":")[0];
+						if (type.equals("codeblock")) {
+							codeblocknames.add(name);
+							codeblockstatements.add("");
+						} else {
+							value = "nil";
+							System.out.println("出现错误，值将自动设为nil"); 
+							if (varNames.contains(name)) { 
+								values.set(varNames.indexOf(name), value);
+							    types.set(varNames.indexOf(name), type); 
+							} else { 
+								varNames.add(name);
+							    values.add(value);
+							    types.add(type); 
+							}
 						}
+					} catch (Exception ex) {
+						System.out.println("没有提供类型");
 					}
 				}
-				System.out.println("设置成功");
-				printPrompt();
 			}
+			System.out.println("设置完成");
+			printPrompt();
 		}/* else if (str.startsWith("use")) {
 			if (str.equals("use") || str.equals("use?")) {
 				System.out.println("语法错误");
@@ -586,30 +604,181 @@ public class JbabLauncher {
 	    	System.out.println("玩得开心");
 	    	JbabAprilFools.main(new String[] {"april"});
 	    	System.exit(0);
-	    } /*else if (str.startsWith("input")) {
+	    } else if (str.startsWith("input")) {
 	    	if (str.equals("input") || str.equals("input?")) {
 	    		System.out.println("语法错误");
 	    	} else {
 	    		String varname = str.split("\\?")[1];
 	    		if (varNames.contains(varname)) {
-	    			Scanner s = new Scanner(System.in);
 	    			String value = s.nextLine();
 	    			if (types.get(varNames.indexOf(varname)).equals("int") || types.get(varNames.indexOf(varname)).equals("long")) {
 	    				try {
 	    					Integer.parseInt(value);
+	    					values.set(varNames.indexOf(varname), value);
 	    				} catch (Exception e) {
 	    					System.out.println("值不符合要求");
 	    				}
+	    			} else {
+	    				values.set(varNames.indexOf(varname), value);
 	    			}
-	    			s.close();
 	    		} else {
 	    			System.out.println("变量不存在");
 	    		}
 	    	}
 	    	printPrompt();
-	    } else if (str.startsWith("varadd")) {
-	    	
-	    }*/ else {
+	    } else if (str.startsWith("addvar")) {
+	    	if (str.equals("addvar") || str.equals("addvar?")) {
+	    		System.out.println("语法错误");
+	    	} else {
+	    		String s = str.split("\\?")[1];
+	    		if (!s.contains(":")) {
+	    			System.out.println("语法错误");
+	    		} else {
+	    			String varname = s.split(":")[0];
+	    			String val = s.split(":")[1];
+	    			int v;
+	    			if (varNames.contains(val)) {
+	    				String oval = val;
+	    				val = values.get(varNames.indexOf(val));
+	    				if (types.get(varNames.indexOf(oval)).equals("int") || types.get(varNames.indexOf(oval)).equals("long")) {
+	    					v = Integer.parseInt(val);
+	    				} else v = Integer.MIN_VALUE;
+	    				if ((types.get(varNames.indexOf(varname)).equals("int") || types.get(varNames.indexOf(varname)).equals("long")) && v != Integer.MIN_VALUE) {
+	    					int i = Integer.parseInt(values.get(varNames.indexOf(varname)));
+	    					i = i + v;
+	    					values.set(varNames.indexOf(varname), String.valueOf(i));
+	    				} else if (types.get(varNames.indexOf(varname)).equals("int") || types.get(varNames.indexOf(varname)).equals("long")) {
+	    					System.out.println("类型不匹配");
+	    				} else if (v == Integer.MIN_VALUE && !types.get(varNames.indexOf(varname)).equals("None")) {
+	    					String vval = values.get(varNames.indexOf(varname));
+	    					vval = vval + val;
+	    					values.set(varNames.indexOf(varname), vval);
+	    				}
+	    			} else if (!varNames.contains(varname)) {
+	    				System.out.println("变量不存在");
+	    			} else if (types.get(varNames.indexOf(varname)).equals("int") || types.get(varNames.indexOf(varname)).equals("long") ) {
+	    				try {
+	    					int i = Integer.parseInt(val);
+	    					int j = Integer.parseInt(values.get(varNames.indexOf(varname)));
+	    					j = i + j;
+	    					values.set(varNames.indexOf(varname), String.valueOf(j));
+	    				} catch (Exception e) {
+	    					System.out.println("类型不匹配");
+	    				}
+	    			} else {
+	    				String value = values.get(varNames.indexOf(varname));
+	    				value = value + val;
+	    				values.set(varNames.indexOf(varname), value);
+	    			}
+	    		}
+	    	}
+	    	printPrompt();
+	    } else if (str.startsWith("subvar")){
+	    	if (str.equals("subvar") || str.equals("subvar?") || !str.contains(":")) {
+	    		System.out.println("语法错误");
+	    	} else {
+	    		String var1 = str.split("\\?")[1].split(":")[0];
+	    		String var2 = str.split("\\?")[1].split(":")[1];
+	    		if (!varNames.contains(var1)) {
+	    			System.out.println("变量" + var1 + "不存在或已被删除");
+	    		} else if (!((types.get(varNames.indexOf(var1)).equals("int") && !(types.get(varNames.indexOf(var1)).equals("long"))))) {
+	    			System.out.println("变量" + var1 + "不是整型");
+	    		} else if (!varNames.contains(var2)) {
+	    			try {
+	    				int i = Integer.parseInt(var2);
+	    				int varval = Integer.parseInt(values.get(varNames.indexOf(var1)));
+	    				varval -= i;
+	    				values.set(varNames.indexOf(var1), String.valueOf(varval));
+	    			} catch (Exception e) {
+	    				System.out.println("只有整型可以进行加减法");
+	    			}
+	    		} else if (!(types.get(varNames.indexOf(var2))).equals("int") && !(types.get(varNames.indexOf(var2))).equals("long")) {
+	    			System.out.println("变量" + var2 + "不是整型");
+	    		} else {
+	    			int ivar1 = Integer.parseInt(values.get(varNames.indexOf(var1)));
+	    			int ivar2 = Integer.parseInt(values.get(varNames.indexOf(var2)));
+	    			ivar1 -= ivar2;
+	    			values.set(varNames.indexOf(var1), String.valueOf(ivar1));
+	    		}
+	    	}
+	    	printPrompt();
+	    } else if (str.startsWith("mulvar")){
+	    	if (str.equals("mulvar") || str.equals("mulvar?") || !str.contains(":")) {
+	    		System.out.println("语法错误");
+	    	} else {
+	    		String var1 = str.split("\\?")[1].split(":")[0];
+	    		String var2 = str.split("\\?")[1].split(":")[1];
+	    		if (!varNames.contains(var1)) {
+	    			System.out.println("变量" + var1 + "不存在或已被删除");
+	    		} else if (!types.get(varNames.indexOf(var1)).equals("int") && !types.get(varNames.indexOf(var1)).equals("long")) {
+	    			try {
+	    				int ivar2 = Integer.parseInt(var2);
+	    				String svar1 = values.get(varNames.indexOf(var1));
+	    				String copy = svar1;
+	    				svar1 = "";
+	    				for (int i = 0; i < ivar2; i++) {
+	    					svar1 += copy;
+	    				}
+	    				values.set(varNames.indexOf(var1), svar1);
+	    			} catch (Exception e) {
+	    				try {
+	    					int ivar2 = Integer.parseInt(values.get(varNames.indexOf(var2)));
+	    					String svar1 = values.get(varNames.indexOf(var1));
+	    					String copy = svar1;
+	    					svar1 = "";
+	    					for (int i = 0; i < ivar2; i++) {
+	    						svar1 += copy;
+	    					}
+	    					values.set(varNames.indexOf(var1), svar1);
+	    				} catch (Exception ex) {
+	    					System.out.println("字符串不能乘非整数次");
+	    				}
+	    			}
+	    		} else if (!varNames.contains(var2)) {
+	    			System.out.println("变量" + var2 + "不存在或已被删除");
+	    		} else if (!types.get(varNames.indexOf(var2)).equals("int") && !types.get(varNames.indexOf(var2)).equals("long")) {
+	    			System.out.println("整数不可以乘非整数");
+	    		} else {
+	    			int ivar1 = Integer.parseInt(values.get(varNames.indexOf(var1)));
+	    			int ivar2 = Integer.parseInt(values.get(varNames.indexOf(var2)));
+	    			ivar1 *= ivar2;
+	    			values.set(varNames.indexOf(var1), String.valueOf(ivar1));
+	    		}
+	    	}
+	    	printPrompt();
+		} else if (str.startsWith("divvar")){
+			if (str.equals("divvar") || str.equals("divvar?") || !str.contains(":")) {
+	    		System.out.println("语法错误");
+	    	} else {
+	    		String var1 = str.split("\\?")[1].split(":")[0];
+	    		String var2 = str.split("\\?")[1].split(":")[1];
+	    		if (!varNames.contains(var1)) {
+	    			System.out.println("变量" + var1 + "不存在或已被删除");
+	    		} else if (!((types.get(varNames.indexOf(var1)).equals("int") && !(types.get(varNames.indexOf(var1)).equals("long"))))) {
+	    			System.out.println("变量" + var1 + "不是整型");
+	    		} else if (!varNames.contains(var2)) {
+	    			try {
+	    				int i = Integer.parseInt(var2);
+	    				int varval = Integer.parseInt(values.get(varNames.indexOf(var1)));
+	    				varval /= i;
+	    				values.set(varNames.indexOf(var1), String.valueOf(varval));
+	    			} catch (Exception e) {
+	    				System.out.println("只有整型可以进行加减法");
+	    			}
+	    		} else if (!(types.get(varNames.indexOf(var2))).equals("int") && !(types.get(varNames.indexOf(var2))).equals("long")) {
+	    			System.out.println("变量" + var2 + "不是整型");
+	    		} else {
+	    			int ivar1 = Integer.parseInt(values.get(varNames.indexOf(var1)));
+	    			int ivar2 = Integer.parseInt(values.get(varNames.indexOf(var2)));
+	    			ivar1 /= ivar2;
+	    			values.set(varNames.indexOf(var1), String.valueOf(ivar1));
+	    		}
+	    	}
+	    	printPrompt();
+		} /*else if (str.equals("installer")){
+			new Installer();
+			printPrompt();
+		}*/ else {
 			System.out.println(str + "不是合法的JBAB命令");
 			printPrompt();
 		}
