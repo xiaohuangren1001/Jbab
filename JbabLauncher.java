@@ -84,11 +84,7 @@ public class JbabLauncher {
 			printPrompt();
 			return;
 		}/* else if (str.equals("calculator")) {
-			if (!Calculation.installed) {
-				System.out.println("Jbab.calculation包未启用");
-			} else {
 				new JbabCalculator();
-			}
 		}*/ else if (str.startsWith("print")) {
 			if (str.equals("print") || str.equals("print?")) {
 				System.out.println("语法错误");
@@ -627,158 +623,139 @@ public class JbabLauncher {
 	    	}
 	    	printPrompt();
 	    } else if (str.startsWith("addvar")) {
-	    	if (str.equals("addvar") || str.equals("addvar?")) {
-	    		System.out.println("语法错误");
-	    	} else {
-	    		String s = str.split("\\?")[1];
-	    		if (!s.contains(":")) {
-	    			System.out.println("语法错误");
-	    		} else {
-	    			String varname = s.split(":")[0];
-	    			String val = s.split(":")[1];
-	    			int v;
-	    			if (varNames.contains(val)) {
-	    				String oval = val;
-	    				val = values.get(varNames.indexOf(val));
-	    				if (types.get(varNames.indexOf(oval)).equals("int") || types.get(varNames.indexOf(oval)).equals("long")) {
-	    					v = Integer.parseInt(val);
-	    				} else v = Integer.MIN_VALUE;
-	    				if ((types.get(varNames.indexOf(varname)).equals("int") || types.get(varNames.indexOf(varname)).equals("long")) && v != Integer.MIN_VALUE) {
-	    					int i = Integer.parseInt(values.get(varNames.indexOf(varname)));
-	    					i = i + v;
-	    					values.set(varNames.indexOf(varname), String.valueOf(i));
-	    				} else if (types.get(varNames.indexOf(varname)).equals("int") || types.get(varNames.indexOf(varname)).equals("long")) {
-	    					System.out.println("类型不匹配");
-	    				} else if (v == Integer.MIN_VALUE && !types.get(varNames.indexOf(varname)).equals("None")) {
-	    					String vval = values.get(varNames.indexOf(varname));
-	    					vval = vval + val;
-	    					values.set(varNames.indexOf(varname), vval);
-	    				}
-	    			} else if (!varNames.contains(varname)) {
-	    				System.out.println("变量不存在");
-	    			} else if (types.get(varNames.indexOf(varname)).equals("int") || types.get(varNames.indexOf(varname)).equals("long") ) {
-	    				try {
-	    					int i = Integer.parseInt(val);
-	    					int j = Integer.parseInt(values.get(varNames.indexOf(varname)));
-	    					j = i + j;
-	    					values.set(varNames.indexOf(varname), String.valueOf(j));
-	    				} catch (Exception e) {
-	    					System.out.println("类型不匹配");
-	    				}
-	    			} else {
-	    				String value = values.get(varNames.indexOf(varname));
-	    				value = value + val;
-	    				values.set(varNames.indexOf(varname), value);
-	    			}
-	    		}
-	    	}
+    		String s = str.split("\\?")[1];
+    		if (!s.contains(":")) {
+    			System.out.println("语法错误");
+    		} else {
+    			String varname = s.split(":")[0];
+    			String val = s.split(":")[1];
+    			int v;
+    			if (varNames.contains(val)) {
+    				String oval = val;
+    				val = values.get(varNames.indexOf(val));
+    				if (types.get(varNames.indexOf(oval)).equals("int") || types.get(varNames.indexOf(oval)).equals("long")) {
+    					v = Integer.parseInt(val);
+    				} else v = Integer.MIN_VALUE;
+    				if ((types.get(varNames.indexOf(varname)).equals("int") || types.get(varNames.indexOf(varname)).equals("long")) && v != Integer.MIN_VALUE) {
+    					int i = Integer.parseInt(values.get(varNames.indexOf(varname)));
+    					i = i + v;
+    					values.set(varNames.indexOf(varname), String.valueOf(i));
+    				} else if (types.get(varNames.indexOf(varname)).equals("int") || types.get(varNames.indexOf(varname)).equals("long")) {
+    					System.out.println("类型不匹配");
+    				} else if (v == Integer.MIN_VALUE && !types.get(varNames.indexOf(varname)).equals("None")) {
+    					String vval = values.get(varNames.indexOf(varname));
+    					vval = vval + val;
+    					values.set(varNames.indexOf(varname), vval);
+    				}
+    			} else if (!varNames.contains(varname)) {
+    				System.out.println("变量不存在");
+    			} else if (types.get(varNames.indexOf(varname)).equals("int") || types.get(varNames.indexOf(varname)).equals("long") ) {
+    				try {
+    					int i = Integer.parseInt(val);
+    					int j = Integer.parseInt(values.get(varNames.indexOf(varname)));
+    					j = i + j;
+    					values.set(varNames.indexOf(varname), String.valueOf(j));
+    				} catch (Exception e) {
+    					System.out.println("类型不匹配");
+    				}
+    			} else {
+    				String value = values.get(varNames.indexOf(varname));
+    				value = value + val;
+    				values.set(varNames.indexOf(varname), value);
+    			}
+    		}
 	    	printPrompt();
 	    } else if (str.startsWith("subvar")){
-	    	if (str.equals("subvar") || str.equals("subvar?") || !str.contains(":")) {
-	    		System.out.println("语法错误");
-	    	} else {
-	    		String var1 = str.split("\\?")[1].split(":")[0];
-	    		String var2 = str.split("\\?")[1].split(":")[1];
-	    		if (!varNames.contains(var1)) {
-	    			System.out.println("变量" + var1 + "不存在或已被删除");
-	    		} else if (!((types.get(varNames.indexOf(var1)).equals("int") && !(types.get(varNames.indexOf(var1)).equals("long"))))) {
-	    			System.out.println("变量" + var1 + "不是整型");
-	    		} else if (!varNames.contains(var2)) {
-	    			try {
-	    				int i = Integer.parseInt(var2);
-	    				int varval = Integer.parseInt(values.get(varNames.indexOf(var1)));
-	    				varval -= i;
-	    				values.set(varNames.indexOf(var1), String.valueOf(varval));
-	    			} catch (Exception e) {
-	    				System.out.println("只有整型可以进行加减法");
-	    			}
-	    		} else if (!(types.get(varNames.indexOf(var2))).equals("int") && !(types.get(varNames.indexOf(var2))).equals("long")) {
-	    			System.out.println("变量" + var2 + "不是整型");
-	    		} else {
-	    			int ivar1 = Integer.parseInt(values.get(varNames.indexOf(var1)));
-	    			int ivar2 = Integer.parseInt(values.get(varNames.indexOf(var2)));
-	    			ivar1 -= ivar2;
-	    			values.set(varNames.indexOf(var1), String.valueOf(ivar1));
-	    		}
-	    	}
+    		String var1 = str.split("\\?")[1].split(":")[0];
+    		String var2 = str.split("\\?")[1].split(":")[1];
+    		if (!varNames.contains(var1)) {
+    			System.out.println("变量" + var1 + "不存在或已被删除");
+    		} else if (!((types.get(varNames.indexOf(var1)).equals("int") && !(types.get(varNames.indexOf(var1)).equals("long"))))) {
+    			System.out.println("变量" + var1 + "不是整型");
+    		} else if (!varNames.contains(var2)) {
+    			try {
+    				int i = Integer.parseInt(var2);
+    				int varval = Integer.parseInt(values.get(varNames.indexOf(var1)));
+    				varval -= i;
+    				values.set(varNames.indexOf(var1), String.valueOf(varval));
+    			} catch (Exception e) {
+    				System.out.println("只有整型可以进行加减法");
+    			}
+    		} else if (!(types.get(varNames.indexOf(var2))).equals("int") && !(types.get(varNames.indexOf(var2))).equals("long")) {
+    			System.out.println("变量" + var2 + "不是整型");
+    		} else {
+    			int ivar1 = Integer.parseInt(values.get(varNames.indexOf(var1)));
+    			int ivar2 = Integer.parseInt(values.get(varNames.indexOf(var2)));
+    			ivar1 -= ivar2;
+    			values.set(varNames.indexOf(var1), String.valueOf(ivar1));
+    		}
 	    	printPrompt();
 	    } else if (str.startsWith("mulvar")){
-	    	if (str.equals("mulvar") || str.equals("mulvar?") || !str.contains(":")) {
-	    		System.out.println("语法错误");
-	    	} else {
-	    		String var1 = str.split("\\?")[1].split(":")[0];
-	    		String var2 = str.split("\\?")[1].split(":")[1];
-	    		if (!varNames.contains(var1)) {
-	    			System.out.println("变量" + var1 + "不存在或已被删除");
-	    		} else if (!types.get(varNames.indexOf(var1)).equals("int") && !types.get(varNames.indexOf(var1)).equals("long")) {
-	    			try {
-	    				int ivar2 = Integer.parseInt(var2);
-	    				String svar1 = values.get(varNames.indexOf(var1));
-	    				String copy = svar1;
-	    				svar1 = "";
-	    				for (int i = 0; i < ivar2; i++) {
-	    					svar1 += copy;
-	    				}
-	    				values.set(varNames.indexOf(var1), svar1);
-	    			} catch (Exception e) {
-	    				try {
-	    					int ivar2 = Integer.parseInt(values.get(varNames.indexOf(var2)));
-	    					String svar1 = values.get(varNames.indexOf(var1));
-	    					String copy = svar1;
-	    					svar1 = "";
-	    					for (int i = 0; i < ivar2; i++) {
-	    						svar1 += copy;
-	    					}
-	    					values.set(varNames.indexOf(var1), svar1);
-	    				} catch (Exception ex) {
-	    					System.out.println("字符串不能乘非整数次");
-	    				}
-	    			}
-	    		} else if (!varNames.contains(var2)) {
-	    			System.out.println("变量" + var2 + "不存在或已被删除");
-	    		} else if (!types.get(varNames.indexOf(var2)).equals("int") && !types.get(varNames.indexOf(var2)).equals("long")) {
-	    			System.out.println("整数不可以乘非整数");
-	    		} else {
-	    			int ivar1 = Integer.parseInt(values.get(varNames.indexOf(var1)));
-	    			int ivar2 = Integer.parseInt(values.get(varNames.indexOf(var2)));
-	    			ivar1 *= ivar2;
-	    			values.set(varNames.indexOf(var1), String.valueOf(ivar1));
-	    		}
-	    	}
+    		String var1 = str.split("\\?")[1].split(":")[0];
+    		String var2 = str.split("\\?")[1].split(":")[1];
+    		if (!varNames.contains(var1)) {
+    			System.out.println("变量" + var1 + "不存在或已被删除");
+    		} else if (!types.get(varNames.indexOf(var1)).equals("int") && !types.get(varNames.indexOf(var1)).equals("long")) {
+    			try {
+    				int ivar2 = Integer.parseInt(var2);
+    				String svar1 = values.get(varNames.indexOf(var1));
+    				String copy = svar1;
+    				svar1 = "";
+    				for (int i = 0; i < ivar2; i++) {
+    					svar1 += copy;
+    				}
+    				values.set(varNames.indexOf(var1), svar1);
+    			} catch (Exception e) {
+    				try {
+    					int ivar2 = Integer.parseInt(values.get(varNames.indexOf(var2)));
+    					String svar1 = values.get(varNames.indexOf(var1));
+    					String copy = svar1;
+    					svar1 = "";
+    					for (int i = 0; i < ivar2; i++) {
+    						svar1 += copy;
+    					}
+    					values.set(varNames.indexOf(var1), svar1);
+    				} catch (Exception ex) {
+    					System.out.println("字符串不能乘非整数次");
+    				}
+    			}
+    		} else if (!varNames.contains(var2)) {
+    			System.out.println("变量" + var2 + "不存在或已被删除");
+    		} else if (!types.get(varNames.indexOf(var2)).equals("int") && !types.get(varNames.indexOf(var2)).equals("long")) {
+    			System.out.println("整数不可以乘非整数");
+    		} else {
+    			int ivar1 = Integer.parseInt(values.get(varNames.indexOf(var1)));
+    			int ivar2 = Integer.parseInt(values.get(varNames.indexOf(var2)));
+    			ivar1 *= ivar2;
+    			values.set(varNames.indexOf(var1), String.valueOf(ivar1));
+    		}
 	    	printPrompt();
 		} else if (str.startsWith("divvar")){
-			if (str.equals("divvar") || str.equals("divvar?") || !str.contains(":")) {
-	    		System.out.println("语法错误");
-	    	} else {
-	    		String var1 = str.split("\\?")[1].split(":")[0];
-	    		String var2 = str.split("\\?")[1].split(":")[1];
-	    		if (!varNames.contains(var1)) {
-	    			System.out.println("变量" + var1 + "不存在或已被删除");
-	    		} else if (!((types.get(varNames.indexOf(var1)).equals("int") && !(types.get(varNames.indexOf(var1)).equals("long"))))) {
-	    			System.out.println("变量" + var1 + "不是整型");
-	    		} else if (!varNames.contains(var2)) {
-	    			try {
-	    				int i = Integer.parseInt(var2);
-	    				int varval = Integer.parseInt(values.get(varNames.indexOf(var1)));
-	    				varval /= i;
-	    				values.set(varNames.indexOf(var1), String.valueOf(varval));
-	    			} catch (Exception e) {
-	    				System.out.println("只有整型可以进行加减法");
-	    			}
-	    		} else if (!(types.get(varNames.indexOf(var2))).equals("int") && !(types.get(varNames.indexOf(var2))).equals("long")) {
-	    			System.out.println("变量" + var2 + "不是整型");
-	    		} else {
-	    			int ivar1 = Integer.parseInt(values.get(varNames.indexOf(var1)));
-	    			int ivar2 = Integer.parseInt(values.get(varNames.indexOf(var2)));
-	    			ivar1 /= ivar2;
-	    			values.set(varNames.indexOf(var1), String.valueOf(ivar1));
-	    		}
-	    	}
+    		String var1 = str.split("\\?")[1].split(":")[0];
+    		String var2 = str.split("\\?")[1].split(":")[1];
+    		if (!varNames.contains(var1)) {
+    			System.out.println("变量" + var1 + "不存在或已被删除");
+    		} else if (!((types.get(varNames.indexOf(var1)).equals("int") && !(types.get(varNames.indexOf(var1)).equals("long"))))) {
+    			System.out.println("变量" + var1 + "不是整型");
+    		} else if (!varNames.contains(var2)) {
+    			try {
+    				int i = Integer.parseInt(var2);
+    				int varval = Integer.parseInt(values.get(varNames.indexOf(var1)));
+    				varval /= i;
+    				values.set(varNames.indexOf(var1), String.valueOf(varval));
+    			} catch (Exception e) {
+    				System.out.println("只有整型可以进行加减法");
+    			}
+    		} else if (!(types.get(varNames.indexOf(var2))).equals("int") && !(types.get(varNames.indexOf(var2))).equals("long")) {
+    			System.out.println("变量" + var2 + "不是整型");
+    		} else {
+    			int ivar1 = Integer.parseInt(values.get(varNames.indexOf(var1)));
+    			int ivar2 = Integer.parseInt(values.get(varNames.indexOf(var2)));
+    			ivar1 /= ivar2;
+    			values.set(varNames.indexOf(var1), String.valueOf(ivar1));
+    		}
 	    	printPrompt();
-		} /*else if (str.equals("installer")){
-			new Installer();
-			printPrompt();
-		}*/ else {
+		} else {
 			System.out.println(str + "不是合法的JBAB命令");
 			printPrompt();
 		}
